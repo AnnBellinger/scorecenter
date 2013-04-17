@@ -18,7 +18,7 @@ app.listen(port, function() {
 // Mongo initialization
 var mongoUri = process.env.MONGOLAB_URI || 
   process.env.MONGOHQ_URL || 
-  'mongodb://localhost:27017/scorecenter';
+  'mongodb://<ABellinger>:<9ff62b9ed835231aa7a5e3e4791dfc44>@dharma.mongohq.com:10074/scorecenter';
 var mongo = require('mongodb');
 var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 	db = databaseConnection;
