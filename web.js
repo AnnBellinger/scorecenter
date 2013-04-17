@@ -7,6 +7,7 @@ app.set('title', 'nodeapp');
 app.all('/', function (req, res, next){
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
+	next();
 });
 
 var port = process.env.PORT || 5000;
@@ -105,18 +106,15 @@ app.get('/username', function(req, res){
 });
 
 app.post('/submit.json', function(req, res){
-	for(i=0;i<req.body.length();i++)
-	{
-		var game = req.body.i.game_title;
-		var user = req.body.i.username;
-		var score = req.body.i.score;
-		var time = req.body.i.created_at;
-		db.collection('scores', function(err, collection){
-		console.log(err);
-			var doc1 = {'game_title':game, 'username':user, 'score':score, 'created_at':time};
-			collection.insert(doc1);
-		});
-	}
+	var parsed = JSON.parse(req.body);
+	db.collection('scores', function(err, collection){
+		for(i=0;i<parsed.length;i++)
+		{
+			data = {"username":parsed[i]['username'],"game_title":parsed[i]['game_title'],"score":parsed[i]['score'],"created_at":parsed[i]['created_at']}; //finish this
+			collection.insert(data);
+		}
+		db.close();
+	});
 });
 
 app.listen(process.env.PORT || 3000);
