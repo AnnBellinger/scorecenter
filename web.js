@@ -117,5 +117,3 @@ app.post('/submit.json', function(req, res){
 		db.close();
 	});
 });
-
-//app.listen(process.env.PORT || 3000);
