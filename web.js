@@ -58,7 +58,7 @@ app.get('/highscores.json', function(request, response) {
 					add = add + highscore;
 				}
 				else{
-					add = add + ']'
+					add = add + ']';
 					db.close();
 					response.send('<head><title>HighScores</title></head><body><h1>High Scores</h1>' + add + '</body>');
 				}
