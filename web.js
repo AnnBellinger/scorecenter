@@ -32,7 +32,7 @@ app.get('/', function (request, response) {
 		var display = '';
 		collection.find(function(err, cursor){
 			cursor.each(function(err, output){
-				if(output != null)
+				if(output)
 				{
 					display = display + '<tr><td>' + output.username + '</td><td>' + output.game_title + '</td><td>' + output.score + '</td><td>' + output.created_at + '</td></tr>';
 				}
@@ -49,10 +49,10 @@ app.get('/highscores.json', function(request, response) {
 	var gamename = request.query;
 	response.set('Content-Type', 'text/html');
 	db.collection('scorecenter', function(err, collection){
-		var add = '['
+		var add = '[';
 		collection.find(gamename).sort({score:-1}).limit(10, function(err, cursor){
 			cursor.each(function(err, item){
-				if(item != null)
+				if(item)
 				{
 					highscore = JSON.stringify(item);
 					add = add + highscore;
@@ -80,7 +80,7 @@ app.get('/username', function(req, res){
 		var count = 0;
 		collection.find(function(err, cursor){
 			cursor.each(function(err, output){
-				if(output != null)
+				if(output)
 				{
 					if(output.username == user)
 					{
