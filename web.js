@@ -42,7 +42,7 @@ app.get('/highscores.json', function(request, response) {
 	response.set('Content-Type', 'text/html');
 	db.collection('scorecenter', function(err, collection){
 		var add = '[';
-		collection.find(gamename).sort({score:1}).limit(10, function(err, cursor){
+		collection.find(gamename).sort({score:-1}).limit(10, function(err, cursor){
 			cursor.each(function(err, item){
 				if(item)
 				{
@@ -99,7 +99,8 @@ app.get('/username', function(req, res){
 });
 
 app.post('/submit.json', function(req, res){
-	res.header("Access-Control-Allow-Origin", "*");
+	app.set('Content-Type', 'text/json');
+	res.header("Access-Control-Allow-Origin","*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	var user = req.body.username;
 	var score = req.body.score;
