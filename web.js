@@ -99,7 +99,7 @@ app.get('/username', function(req, res){
 });
 
 app.post('/submit.json', function(req, res){
-	app.set('Content-Type', 'text/json');
+	res.set('Content-Type', 'text/json');
 	res.header("Access-Control-Allow-Origin","*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	var user = req.body.username;
