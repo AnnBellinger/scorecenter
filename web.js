@@ -70,7 +70,7 @@ app.get('/highscores.json', function(request, response) {
 app.get('/usersearch', function(req, res){
 	res.set('Content-Type', 'text/html');
 	res.send('<head><title>UserSearch</title></head><body><p>Please enter the name of the user for who you would like to see their high scores!</p><form name="input" action="username" method="get">Enter the Username: <input type="text" name="user" id="input"><input type="submit" id="submit" value="Submit"></form></body>');
-);
+});
 
 app.get('/username', function(req, res){
 	res.set('Content-Type', 'text/html');
