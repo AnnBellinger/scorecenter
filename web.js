@@ -27,7 +27,7 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 
 app.get('/', function (request, response) {
 	response.set('Content-Type', 'text/html');
-	db.collection('scores', function(err, collection){
+	db.collection('scorecenter', function(err, collection){
 		console.log(err);
 		var display = '';
 		collection.find(function(err, cursor){
@@ -48,7 +48,7 @@ app.get('/', function (request, response) {
 app.get('/highscores.json', function(request, response) {
 	var gamename = request.query;
 	response.set('Content-Type', 'text/html');
-	db.collection('scores', function(err, collection){
+	db.collection('scorecenter', function(err, collection){
 		var add = '['
 		collection.find(gamename).sort({score:-1}).limit(10, function(err, cursor){
 			cursor.each(function(err, item){
@@ -75,7 +75,7 @@ app.get('/usersearch', function(req, res){
 app.get('/username', function(req, res){
 	res.set('Content-Type', 'text/html');
 	var user = req.query.user;
-	db.collection('scores', function(err, collection){
+	db.collection('scorecenter', function(err, collection){
 		var display = '';
 		var count = 0;
 		collection.find(function(err, cursor){
@@ -108,7 +108,7 @@ app.get('/username', function(req, res){
 
 app.post('/submit.json', function(req, res){
 	var parsed = JSON.parse(req.body);
-	db.collection('scores', function(err, collection){
+	db.collection('scorecenter', function(err, collection){
 		for(i=0;i<parsed.length;i++)
 		{
 			data = {"username":parsed[i]['username'],"game_title":parsed[i]['game_title'],"score":parsed[i]['score'],"created_at":parsed[i]['created_at']}; //finish this
