@@ -18,7 +18,7 @@ app.listen(port, function() {
 // Mongo initialization
 var mongoUri = process.env.MONGOLAB_URI || 
   process.env.MONGOHQ_URL || 
-  'mongodb://heroku_app15014228:87odamv1bg2c9d63h7cui9ghd0@ds035027.mongolab.com:35027/heroku_app15014228';
+  'mongodb://localhost:27017/scorecenter';
 var mongo = require('mongodb');
 var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 	db = databaseConnection;
