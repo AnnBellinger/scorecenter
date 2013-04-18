@@ -106,7 +106,7 @@ app.get('/username', function(req, res){
 	}); 
 });
 
-app.post('/submit.json', function(req, res){
+app.post('/submit.json', function(req, res, next){
 	var parsed = JSON.parse(req.body);
 	db.collection('scorecenter', function(err, collection){
 		for(i=0;i<parsed.length;i++)
