@@ -17,10 +17,11 @@ app.listen(port, function() {
 
 // Mongo initialization
 var mongoUri = process.env.MONGOLAB_URI || 
-  process.env.MONGOHQ_URL || 
+   process.env.MONGOHQ_URL || 
   'mongodb://localhost:27017/scorecenter';
 var mongo = require('mongodb');
 var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
+	console.log(error);
 	db = databaseConnection;
 });
 
