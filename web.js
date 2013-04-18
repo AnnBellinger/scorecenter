@@ -4,11 +4,11 @@ var app = express(express.logger());
 app.use(express.bodyParser());
 app.set('title', 'nodeapp');
 
-app.all('/', function (req, res, next){
+/*app.all('/', function (req, res, next){
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	next();
-});
+}); */
 
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
@@ -106,7 +106,9 @@ app.get('/username', function(req, res){
 	}); 
 });
 
-app.post('/submit.json', function(req, res, next){
+app.post('/submit.json', function(req, res){
+	res.header("Access-Control-Allow-Origin", "*");
+	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	var parsed = JSON.parse(req.body);
 	db.collection('scorecenter', function(err, collection){
 		for(i=0;i<parsed.length;i++)
