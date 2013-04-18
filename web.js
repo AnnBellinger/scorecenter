@@ -4,12 +4,6 @@ var app = express(express.logger());
 app.use(express.bodyParser());
 app.set('title', 'nodeapp');
 
-/*app.all('/', function (req, res, next){
-	res.header("Access-Control-Allow-Origin", "*");
-	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	next();
-}); */
-
 var port = process.env.PORT || 5000;
 app.listen(port, function() {
 	console.log("Listening on " + port);
@@ -21,14 +15,12 @@ var mongoUri = process.env.MONGOLAB_URI ||
   'mongodb://localhost:27017/scorecenter';
 var mongo = require('mongodb');
 var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
-	console.log(error);
 	db = databaseConnection;
 });
 
 app.get('/', function (request, response) {
 	response.set('Content-Type', 'text/html');
 	db.collection('scorecenter', function(err, collection){
-		console.log(err);
 		var display = '';
 		collection.find(function(err, cursor){
 			cursor.each(function(err, output){
@@ -50,7 +42,7 @@ app.get('/highscores.json', function(request, response) {
 	response.set('Content-Type', 'text/html');
 	db.collection('scorecenter', function(err, collection){
 		var add = '[';
-		collection.find(gamename).sort({score:-1}).limit(10, function(err, cursor){
+		collection.find(gamename).sort({score:1}).limit(10, function(err, cursor){
 			cursor.each(function(err, item){
 				if(item)
 				{
@@ -109,13 +101,11 @@ app.get('/username', function(req, res){
 app.post('/submit.json', function(req, res){
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	console.log(req.body.username);
 	var user = req.body.username;
 	var score = req.body.score;
 	var game_title = req.body.game_title;
-	var created_at = req.body.created_at;
 	db.collection('scorecenter', function(err, collection){
-		data = {"username":user,"game_title":game_title,"score":score,"created_at":created_at};
+		data = {"username":user,"game_title":game_title,"score":score,"created_at":Date()};
 		collection.insert(data);
 		db.close();
 	});
