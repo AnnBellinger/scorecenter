@@ -109,13 +109,14 @@ app.get('/username', function(req, res){
 app.post('/submit.json', function(req, res){
 	res.header("Access-Control-Allow-Origin", "*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
-	var parsed = JSON.parse(req.body);
+	console.log(req.body.username);
+	var user = req.body.username;
+	var score = req.body.score;
+	var game_title = req.body.game_title;
+	var created_at = req.body.created_at;
 	db.collection('scorecenter', function(err, collection){
-		for(i=0;i<parsed.length;i++)
-		{
-			data = {"username":parsed[i]['username'],"game_title":parsed[i]['game_title'],"score":parsed[i]['score'],"created_at":parsed[i]['created_at']}; //finish this
-			collection.insert(data);
-		}
+		data = {"username":user,"game_title":game_title,"score":score,"created_at":created_at};
+		collection.insert(data);
 		db.close();
 	});
 });
