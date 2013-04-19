@@ -21,17 +21,12 @@ var db = mongo.Db.connect(mongoUri, function (error, databaseConnection) {
 app.get('/', function (request, response) {
 	response.set('Content-Type', 'text/html');
 	db.collection('scorecenter', function(err, collection){
-		var display = '';
-		collection.find(function(err, cursor){
-			cursor.each(function(err, output){
-				if(output)
-				{
-					display = display + '<tr><td>' + output.username + '</td><td>' + output.game_title + '</td><td>' + output.score + '</td><td>' + output.created_at + '</td></tr>';
-				}
-				else{
-					response.send('<head><title>ScoreCenter</title></head><body><h1>Score Center</h1><p><a href="/usersearch">Search for a User</a></p><p>To search highscores by a particular game, click on <a href="/highscores.json">this link</a> and add ?game_title=WHAT_GAME_YOU_WOULD_LIKE_TO_SEE to the URL</p><table border="1"><tr><td> User </td><td> Game </td><td> Score </td><td> Date </td></tr>' + display + '</table></body>');
-				}
-			});
+		var display = '<head><title>ScoreCenter</title></head><body><h1>Score Center</h1><p><a href="/usersearch">Search for a User</a></p><p>To search highscores by a particular game, click on <a href="/highscores.json">this link</a> and add ?game_title=WHAT_GAME_YOU_WOULD_LIKE_TO_SEE to the URL</p><table border="1"><tr><td> User </td><td> Game </td><td> Score </td><td> Date </td></tr>';
+		collection.find().toArray(function(err, output){
+			for (var i = 0; i < output.length; i++) {
+				display = display + '<tr><td>' + output[i].username + '</td><td>' + output[i].game_title + '</td><td>' + output[i].score + '</td><td>' + output[i].created_at + '</td></tr>';
+			}
+			response.send(display + '</table></body></html>');
 		});
 	});
 });
@@ -50,6 +45,7 @@ app.get('/highscores.json', function(request, response) {
 				}
 				else{
 					add = add + ']';
+					db.close();
 					response.send('<head><title>HighScores</title></head><body><h1>High Scores</h1>' + add + '</body>');
 				}
 			});
@@ -82,10 +78,12 @@ app.get('/username', function(req, res){
 				{
 					if(count == 0)
 					{
+						db.close();
 						res.send('<head><title>UserSearch</title></head><body>No Highscores For This User</body>');
 					}
 					else
 					{
+						db.close();
 						res.send('<head><title>UserSearch</title></head><body><table border="1"><tr><td> User </td><td> Game </td><td> Score </td><td> Date </td></tr>' + display + '</table></body>');
 					}
 				}
@@ -95,7 +93,7 @@ app.get('/username', function(req, res){
 });
 
 app.post('/submit.json', function(req, res){
-	res.set('Content-Type', 'text/json');
+	//res.set('Content-Type', 'text/json');
 	res.header("Access-Control-Allow-Origin","*");
 	res.header("Access-Control-Allow-Headers", "X-Requested-With");
 	var user = req.body.username;
@@ -103,6 +101,9 @@ app.post('/submit.json', function(req, res){
 	var game_title = req.body.game_title;
 	db.collection('scorecenter', function(err, collection){
 		data = {"username":user,"game_title":game_title,"score":score,"created_at":Date()};
-		collection.insert(data);
+		collection.insert(data, function(err, saved) {
+			res.send("Done");
+		});
+		//db.close();
 	});
 });
